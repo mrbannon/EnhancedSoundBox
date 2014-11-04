@@ -1,0 +1,2 @@
+file(GLOB LAZYFOO_SRC "*.cpp")
+add_library(LAZYFOO STATIC ${LAZYFOO_SRC})
