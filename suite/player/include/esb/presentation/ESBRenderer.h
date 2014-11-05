@@ -6,7 +6,6 @@
 #include <vector>
 #include "../ESBABase.h"
 #include "../actor/ESBActor.h"
-#include "../presentation/ESBCamera.h"
 #include "../stage/ESBBox.h"
 
 
@@ -47,12 +46,6 @@ class ESBRenderer: public ESBABase
 
 
         /**
-         * Sets camera.
-         */
-        void setCamera(ESBCamera* apESBCamera);
-
-
-        /**
          * Sets a box to the scene.
          */
         void setBox(ESBBox* apESBBox);
@@ -62,6 +55,12 @@ class ESBRenderer: public ESBABase
          * Adds actors to the scene.
          */
         void setActorVector(std::vector<ESBActor*>* avActorVector);
+
+
+        /**
+         * Loads BMP to texture data and returns texture ID.
+         */
+        unsigned int loadBMP(const char *fileName);
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -118,7 +117,6 @@ class ESBRenderer: public ESBABase
     private:
 
 
-        ESBCamera* mpESBCamera;
         std::vector<ESBActor*>* mpActorVector;
         ESBBox* mpESBBox;
         SDL_GLContext mSDLGLContext;
@@ -126,7 +124,6 @@ class ESBRenderer: public ESBABase
         SDL_Window* mpSDLWindow;
         unsigned int mWindowHeight;
         unsigned int mWindowWidth;
-        double test;
 };
 
 #endif

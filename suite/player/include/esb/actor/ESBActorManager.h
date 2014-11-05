@@ -35,15 +35,9 @@ class ESBActorManager: public ESBAManager
 
 
         /**
-         * Add actor.
-         */
-        void addActor(ESBActor* apESBActor);
-
-
-        /**
          * Creates an actor and adds it to the list.
          */
-        void createActor();
+        void createActor(std::string aId, std::string aName, std::string aTextureFilePath);
 
 
         /**
@@ -52,8 +46,34 @@ class ESBActorManager: public ESBAManager
         void update(unsigned int aTimeIndex);
 
 
+        /**
+         * Set/move actor pan, presence, register.
+         */
+        void setActorEventPan(std::string aId, float aValue, unsigned int aTimeIndex);
+        void setActorEventPresence(std::string aId, float aValue, unsigned int aTimeIndex);
+        void setActorEventRegister(std::string aId, float aValue, unsigned int aTimeIndex);
+        void moveActorEventPan(std::string aId, float aValue0, unsigned int aTimeIndex0, float aValue1, unsigned int aTimeIndex1);
+        void moveActorEventPresence(std::string aId, float aValue0, unsigned int aTimeIndex0, float aValue1, unsigned int aTimeIndex1);
+        void moveActorEventRegister(std::string aId, float aValue0, unsigned int aTimeIndex0, float aValue1, unsigned int aTimeIndex1);
+
+
 ///////////////////////////////////////////////////////////////////////////////
-// PRIVATE
+// PRIVATE METHODS
+///////////////////////////////////////////////////////////////////////////////
+        /**
+         * Add actor.
+         */
+        void addActor(ESBActor* apESBActor);
+
+
+        /**
+         * Find actor by ID.
+         */
+        ESBActor* findActorById(std::string aId);
+
+
+///////////////////////////////////////////////////////////////////////////////
+// PRIVATE MEMBERS
 ///////////////////////////////////////////////////////////////////////////////
     private:
 

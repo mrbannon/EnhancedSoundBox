@@ -9,9 +9,8 @@ const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 ///////////////////////////////////////////////////////////////////////////////
 // PUBLIC
 ///////////////////////////////////////////////////////////////////////////////
-ESBDirector::ESBDirector(ESBRenderer* apESBRenderer):
-    mpESBActorManager(nullptr),
-    mpESBCamera(nullptr),
+ESBDirector::ESBDirector(ESBRenderer* apESBRenderer, ESBActorManager* apESBActorManager):
+    mpESBActorManager(apESBActorManager),
     mpESBRenderer(apESBRenderer),
     mpESBStageManager(nullptr)
 {
@@ -25,33 +24,14 @@ ESBDirector::~ESBDirector(void)
         delete mpESBStageManager;
         mpESBStageManager = nullptr;
     }
-    if (mpESBCamera != nullptr)
-    {
-        delete mpESBCamera;
-        mpESBCamera = nullptr;
-    }
-    if (mpESBActorManager != nullptr)
-    {
-        delete mpESBActorManager;
-        mpESBActorManager = nullptr;
-    }
 }
 
 
 void ESBDirector::initialize(void)
 {
-    // Create camera.
-    mpESBCamera = new ESBCamera(0.0f, 300.0f, 1000.0f);
-    mpESBRenderer->setCamera(mpESBCamera);
-
     // Create and initialize managers and other stuff.
-    mpESBActorManager = new ESBActorManager(mpESBRenderer);
-    mpESBActorManager->initialize();
     mpESBStageManager = new ESBStageManager(mpESBRenderer);
     mpESBStageManager->initialize();
-
-    // TEST - create actor
-    mpESBActorManager->createActor();
 }
 
 

@@ -22,48 +22,18 @@ void ESBActorManager::initialize(void)
 {
     mpESBRenderer->setActorVector(&mvActorVector);
 }
-     
 
-void ESBActorManager::addActor(ESBActor* apESBActor)
+
+void ESBActorManager::createActor(std::string aId, std::string aName, std::string aTextureFilePath)
 {
-    if(apESBActor != nullptr)
-    {
-        mvActorVector.push_back(apESBActor);
-    }
-}
+    // Load the BMP texture and get the resulting ID.
+    unsigned int textureId = mpESBRenderer->loadBMP(aTextureFilePath.c_str());
 
+    // Create the actor.
+    ESBActor* pTestActor = new ESBActor(200, 200, aId, aName, textureId);
 
-void ESBActorManager::createActor()
-{
-    // TEST0
-    ESBActor* pTestActor = new ESBActor(50, 50);
+    // Push the actor.
     addActor(pTestActor);
-    pTestActor->addSetEvent(ESBACTOR_EVENT_VARIABLE::PAN, -0.5f, 3000);
-    pTestActor->addSetEvent(ESBACTOR_EVENT_VARIABLE::PRESENCE, 1.0f, 5000);
-    pTestActor->addSetEvent(ESBACTOR_EVENT_VARIABLE::REGISTER, 0.0f, 8000);
-    pTestActor->addSetEvent(ESBACTOR_EVENT_VARIABLE::PRESENCE, 0.5f, 10000);
-
-    // TEST1
-    ESBActor* pTestActor2 = new ESBActor(150, 80);
-    addActor(pTestActor2);
-
-    // PAN TEST.
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::PAN,         0.0f, 0, 1.0f, 10000);
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::PAN,         1.0f, 10000, 0.0f, 20000);
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::PAN,         0.0f, 20000, -1.0f, 30000);
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::PAN,         -1.0f, 30000, 0.0f, 40000);
-
-    // PRESENCE TEST.
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::PRESENCE,    0.0f, 0, 0.5f, 10000);
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::PRESENCE,    0.5f, 10000, 1.0f, 20000);
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::PRESENCE,    1.0f, 20000, 0.5f, 30000);
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::PRESENCE,    0.5f, 30000, 0.0f, 40000);
-
-    // REGISTER TEST.
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::REGISTER,    0.0f, 0, 0.5f, 10000);
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::REGISTER,    0.5f, 10000, 1.0f, 20000);
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::REGISTER,    1.0f, 20000, 0.5f, 30000);
-    pTestActor2->addMoveEvent(ESBACTOR_EVENT_VARIABLE::REGISTER,    0.5f, 30000, 0.0f, 40000);
 }
 
 
@@ -77,6 +47,69 @@ void ESBActorManager::update(unsigned int aTimeIndex)
 }
 
 
+void ESBActorManager::setActorEventPan(std::string aId, float aValue, unsigned int aTimeIndex)
+{
+    ESBActor* pESBActor = findActorById(aId);
+    pESBActor->addSetEvent(ESBACTOR_EVENT_VARIABLE::PAN, aValue, aTimeIndex);
+}
+
+
+void ESBActorManager::setActorEventPresence(std::string aId, float aValue, unsigned int aTimeIndex)
+{
+    ESBActor* pESBActor = findActorById(aId);
+    pESBActor->addSetEvent(ESBACTOR_EVENT_VARIABLE::PRESENCE, aValue, aTimeIndex);
+}
+
+
+void ESBActorManager::setActorEventRegister(std::string aId, float aValue, unsigned int aTimeIndex)
+{
+    ESBActor* pESBActor = findActorById(aId);
+    pESBActor->addSetEvent(ESBACTOR_EVENT_VARIABLE::REGISTER, aValue, aTimeIndex);
+}
+
+
+void ESBActorManager::moveActorEventPan(std::string aId, float aValue0, unsigned int aTimeIndex0, float aValue1, unsigned int aTimeIndex1)
+{
+    ESBActor* pESBActor = findActorById(aId);
+    pESBActor->addMoveEvent(ESBACTOR_EVENT_VARIABLE::PAN, aValue0, aTimeIndex0, aValue1, aTimeIndex1);
+}
+
+
+void ESBActorManager::moveActorEventPresence(std::string aId, float aValue0, unsigned int aTimeIndex0, float aValue1, unsigned int aTimeIndex1)
+{
+    ESBActor* pESBActor = findActorById(aId);
+    pESBActor->addMoveEvent(ESBACTOR_EVENT_VARIABLE::PRESENCE, aValue0, aTimeIndex0, aValue1, aTimeIndex1);
+}
+
+
+void ESBActorManager::moveActorEventRegister(std::string aId, float aValue0, unsigned int aTimeIndex0, float aValue1, unsigned int aTimeIndex1)
+{
+    ESBActor* pESBActor = findActorById(aId);
+    pESBActor->addMoveEvent(ESBACTOR_EVENT_VARIABLE::REGISTER, aValue0, aTimeIndex0, aValue1, aTimeIndex1);
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // PRIVATE
 ///////////////////////////////////////////////////////////////////////////////
+void ESBActorManager::addActor(ESBActor* apESBActor)
+{
+    if(apESBActor != nullptr)
+    {
+        mvActorVector.push_back(apESBActor);
+    }
+}
+
+
+ESBActor* ESBActorManager::findActorById(std::string aId)
+{
+    for(std::vector<ESBActor*>::const_iterator iterator = mvActorVector.begin(); iterator != mvActorVector.end(); ++iterator) 
+    {
+        ESBActor* pESBActor = *iterator;
+        if(pESBActor->getId() == aId)
+        {
+            return pESBActor;
+        }
+    }
+    return nullptr;
+}

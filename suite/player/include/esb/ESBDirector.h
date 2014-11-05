@@ -3,7 +3,6 @@
 
 #include "ESBABase.h"
 #include "actor/ESBActorManager.h"
-#include "presentation/ESBCamera.h"
 #include "presentation/ESBRenderer.h"
 #include "stage/ESBStageManager.h"
 
@@ -20,10 +19,8 @@ class ESBDirector: public ESBABase
 
         /**
          * Constructor.
-         *
-         * @param apESBRenderer renderer
          */
-        ESBDirector(ESBRenderer* apESBRenderer);
+        ESBDirector(ESBRenderer* apESBRenderer, ESBActorManager* apESBActorManager);
 
 
         /**
@@ -33,11 +30,14 @@ class ESBDirector: public ESBABase
 
 
         /**
-         * Temporary.
+         * Initialize.
          */
         void initialize(void);
 
 
+        /**
+         * Run.
+         */
         void run();
 
 
@@ -53,7 +53,6 @@ class ESBDirector: public ESBABase
 
 
         ESBActorManager* mpESBActorManager;
-        ESBCamera* mpESBCamera;
         ESBRenderer* mpESBRenderer;
         ESBStageManager* mpESBStageManager;
 };

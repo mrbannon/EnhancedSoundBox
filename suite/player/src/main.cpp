@@ -9,25 +9,29 @@
  */
 int main(int argc, char** argv)
 {
-    // Create package manager.
-    // ...
-
-    // Let's try to load a package.
-    // ...
-
     // Create the renderer.
     ESBRenderer* pESBRenderer = new ESBRenderer(1280, 960);
     pESBRenderer->initialize();
 
+    // Create our actor manager.
+    ESBActorManager* pESBActorManager = new ESBActorManager(pESBRenderer);
+    pESBActorManager->initialize();
+
+    // Let's try to load a package. This will create the actors, load the textures, yada yada.
+    ESBPackage* pESBPackage = new ESBPackage("/Users/mrbannon/development/EnhancedSoundBox/packages/dummy.txt", 
+                                             pESBActorManager);
+
     // Great! We have a script and we know what we need to get. Everything is in place for this shitshow.
-    // Let's hire/create a director. (The director will be given the package and take care of everything else).
-    ESBDirector* pESBDirector = new ESBDirector(pESBRenderer);
+    // Let's hire/create a director. It will run everything.
+    ESBDirector* pESBDirector = new ESBDirector(pESBRenderer, pESBActorManager);
     pESBDirector->initialize();
 
     // Go for it!
     pESBDirector->run();
 
     delete pESBDirector;
+    delete pESBPackage;
+    delete pESBActorManager;
     delete pESBRenderer;
 
 	SDL_Quit();

@@ -47,6 +47,11 @@ class ESBABase
     {
         logErrorMessage(std::cout, msg);
     }
+    void printErrorMessage(const char* msg)
+    {
+        std::string string(msg);
+        logErrorMessage(std::cout, string);
+    }
     void logErrorMessage(std::ostream &os, const std::string &msg)
     {
         os <<  "ERROR: " << msg << std::endl;

@@ -1,0 +1,36 @@
+###############################################################################
+# Dummy project.
+###############################################################################
+project_name: Some Project Name
+audio_file_path: somesong.mp3
+
+###############################################################################
+# Actor definitions.
+###############################################################################
+actor: back_singer, Mr. Lead Singer, /Users/mrbannon/development/EnhancedSoundBox/packages/sonnybono.bmp
+actor: lead_singer, Mr. Dummy, /Users/mrbannon/development/EnhancedSoundBox/packages/bono.bmp
+
+###############################################################################
+# Events - lead_singer.
+###############################################################################
+actor_set_pan:      lead_singer,    -0.5,   3000
+actor_set_presence: lead_singer,    1.0,    5000
+actor_set_register: lead_singer,    1.0,    5000
+
+###############################################################################
+# Events - back_singer.
+###############################################################################
+actor_move_pan:     back_singer,    0.0,    0,      1.0,    10000
+actor_move_pan:     back_singer,    1.0,    10000,  0.0,    20000
+actor_move_pan:     back_singer,    0.0,    20000,  -1.0,   30000
+actor_move_pan:     back_singer,    -1.0,   30000,  0.0,    40000
+
+actor_move_presence:    back_singer,    0.0,    0,      0.5,    10000
+actor_move_presence:    back_singer,    0.5,    10000,  1.0,    20000
+actor_move_presence:    back_singer,    1.0,    20000,  0.5,    30000
+actor_move_presence:    back_singer,    0.5,    30000,  0.0,    40000
+
+actor_move_register:    back_singer,    0.0,    0,      0.5,    10000
+actor_move_register:    back_singer,    0.5,    10000,  1.0,    20000
+actor_move_register:    back_singer,    1.0,    20000,  0.5,    30000
+actor_move_register:    back_singer,    0.5,    30000,  0.0,    40000

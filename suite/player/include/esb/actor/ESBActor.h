@@ -43,7 +43,10 @@ class ESBActor: public ESBABase
          * Constructor.
          */
         ESBActor(const unsigned int aHeight, 
-                 const unsigned int aWidth);
+                 const unsigned int aWidth,
+                 std::string aId,
+                 std::string aName,
+                 unsigned int mTextureId);
 
 
         /**
@@ -71,6 +74,8 @@ class ESBActor: public ESBABase
 
 
         inline const unsigned short* getIndicies() const { return INDICIES; }
+        inline const float* getTextureCoordinates() const { return TEXTURE_COORDINATES; }
+        inline unsigned int getTextureId() const { return mTextureId; }
 
         inline unsigned int getHeight() { return mHeight; };
         inline unsigned int getWidth() { return mWidth; };
@@ -82,6 +87,7 @@ class ESBActor: public ESBABase
         inline float getRegister() { return mRegister; } // 0 to 1
         inline float getPan() { return mPan; }; // -1 to 1
         inline float getPresence() { return mPresence; };  // 0 to 1
+        inline std::string getId() { return mId; };  // 0 to 1
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,6 +113,7 @@ class ESBActor: public ESBABase
     private:
 
         static const unsigned short INDICIES[];
+        static const float TEXTURE_COORDINATES[];
 
         unsigned int mHeight;
         unsigned int mWidth;
@@ -122,9 +129,14 @@ class ESBActor: public ESBABase
         std::vector<ESBActorEvent*> mvActorEventVectorPan;
         std::vector<ESBActorEvent*> mvActorEventVectorPresence;
         std::vector<ESBActorEvent*> mvActorEventVectorRegister;
+
         unsigned int mActorEventVectorPanIndex;
         unsigned int mActorEventVectorPresenceIndex;
         unsigned int mActorEventVectorRegisterIndex;
+
+        std::string mId;
+        std::string mName;
+        unsigned int mTextureId;
 };
 
 #endif

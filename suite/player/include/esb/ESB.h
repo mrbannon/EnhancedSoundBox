@@ -3,6 +3,7 @@
 
 
 #include "ESBDirector.h"
+#include "package/ESBPackage.h"
 #include "presentation/ESBRenderer.h"
 
 

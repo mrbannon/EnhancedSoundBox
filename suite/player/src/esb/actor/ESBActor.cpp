@@ -3,13 +3,20 @@
 
 const unsigned short ESBActor::INDICIES[] =  {0, 1, 2,
                                               2, 3, 0};
+const float ESBActor::TEXTURE_COORDINATES[] =  {0.0f, 0.0f,
+                                                1.0f, 0.0f,
+                                                1.0f, 1.0f, 
+                                                0.0f, 1.0f};
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // PUBLIC
 ///////////////////////////////////////////////////////////////////////////////
 ESBActor::ESBActor(const unsigned int aHeight, 
-                   const unsigned int aWidth):
+                   const unsigned int aWidth,
+                   std::string aId,
+                   std::string aName,
+                   unsigned int aTextureId):
     mHeight(aHeight),
     mWidth(aWidth),
     mVisible(true),
@@ -22,7 +29,10 @@ ESBActor::ESBActor(const unsigned int aHeight,
     mvActorEventVectorRegister(),
     mActorEventVectorPanIndex(0),
     mActorEventVectorPresenceIndex(0),
-    mActorEventVectorRegisterIndex(0)
+    mActorEventVectorRegisterIndex(0),
+    mId(aId),
+    mName(aName),
+    mTextureId(aTextureId)
 {
     generateVerticies();
 }
@@ -228,7 +238,7 @@ void ESBActor::updateIndexToNextEvent(std::vector<ESBActorEvent*>* apVector, uns
 
 void ESBActor::executSetEvent(ESBActorEvent* apEvent, unsigned int aTimeIndex)
 {
-    printMessage("executing set event at time index " + std::to_string(aTimeIndex));
+    //printMessage("executing set event at time index " + std::to_string(aTimeIndex));
     switch(apEvent->variable)
     {
         case ESBACTOR_EVENT_VARIABLE::PAN:
@@ -254,13 +264,13 @@ void ESBActor::executSetEvent(ESBActorEvent* apEvent, unsigned int aTimeIndex)
             printErrorMessage("unknown event variable");
         }
     }
-    printMessage("done executing event");
+    //printMessage("done executing event");
 }
 
 
 void ESBActor::executMoveEvent(ESBActorEvent* apEvent, unsigned int aTimeIndex)
 {
-    printMessage("executing move event at time index " + std::to_string(aTimeIndex));
+    //printMessage("executing move event at time index " + std::to_string(aTimeIndex));
     unsigned int eventDuration = apEvent->time1 - apEvent->time0;
     float eventProgress = (aTimeIndex - apEvent->time0) / (float)eventDuration;
     float eventValueDelta = apEvent->value1 - apEvent->value0;

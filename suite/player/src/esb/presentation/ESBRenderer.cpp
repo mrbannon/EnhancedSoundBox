@@ -8,12 +8,16 @@
 #include "esb/presentation/ESBRenderer.h"
 
 
+ #define PI 3.14159265
+ #define PI_HALF 1.57079632
+ #define RADIAN_TO_ANGLE 180 / PI
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // PUBLIC
 ///////////////////////////////////////////////////////////////////////////////
 ESBRenderer::ESBRenderer(unsigned int aWindowWidth,
                          unsigned int aWindowHeight):
-mpESBCamera(nullptr),
 mpActorVector(nullptr),
 mpESBBox(nullptr),
 mSDLGLContext(),
@@ -22,7 +26,6 @@ mpSDLWindow(nullptr),
 mWindowHeight(aWindowHeight),
 mWindowWidth(aWindowWidth)
 {
-    test = 0;
 }
 
 
@@ -42,29 +45,11 @@ void ESBRenderer::initialize()
 }
 
 
-void ESBRenderer::setCamera(ESBCamera* apESBCamera)
-{
-    mpESBCamera = apESBCamera;
-}
-
-
 void ESBRenderer::render()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    mpESBCamera->setView();
     draw();
-    //SDL_RenderCopy(ren, tex, NULL, NULL);
-    //SDL_RenderPresent(mpSDLRenderer);
-
-
-    // Camera???
- /*   glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-  //  gluPerspective(45, mWindowWidth / (double)mWindowHeight, 0.1, 4333.0);
-    test += 1;
-    glTranslatef(0, 0, test);*/
-
     SDL_GL_SwapWindow(mpSDLWindow);
 }
 
@@ -81,6 +66,69 @@ void ESBRenderer::setActorVector(std::vector<ESBActor*>* apActorVector)
 }
 
 
+/* taken from http://stackoverflow.com/questions/22886364/load-texture-using-opengl-and-c */
+unsigned int ESBRenderer::loadBMP(const char *fileName)
+{
+    FILE *file;
+    unsigned char header[54];
+    unsigned int dataPos;
+    unsigned int size;
+    unsigned int width, height;
+    unsigned char *data;
+
+
+    file = fopen(fileName, "rb");
+
+    if (file == NULL)
+    {
+        printErrorMessage("invaild texture file path");
+        printErrorMessage(fileName);
+        return false;
+    }
+
+    if (fread(header, 1, 54, file) != 54)
+    {
+        printErrorMessage("invaild texture file; header not right size");
+        printErrorMessage(fileName);
+        return false;
+    }
+
+    if (header[0] != 'B' || header[1] != 'M')
+    {
+        printErrorMessage("invaild texture file; initial header characters incorrect");
+        printErrorMessage(fileName);
+        return false;
+    }
+
+    dataPos     = *(int*)&(header[0x0A]);
+    size        = *(int*)&(header[0x22]);
+    width       = *(int*)&(header[0x12]);
+    height      = *(int*)&(header[0x16]);
+
+    if (size == NULL)
+        size = width * height * 3;
+    if (dataPos == NULL)
+        dataPos = 54;
+
+    data = new unsigned char[size];
+
+    fread(data, 1, size, file);
+
+    fclose(file);
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+
+    std::string fileNameString(fileName);
+    printMessage("loaded '" + fileNameString + "', ID " + std::to_string(texture));
+
+    return texture;
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // PRIVATE
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,25 +141,50 @@ void ESBRenderer::draw()
 
 void ESBRenderer::drawActor(ESBActor* apESBActor)
 {
+    // Set mode.
     glMatrixMode(GL_MODELVIEW);
-    glEnableClientState(GL_VERTEX_ARRAY);
     glLoadIdentity();
-    glVertexPointer(3, GL_FLOAT, sizeof(vertex), apESBActor->getVerticies());
 
-    // Our temporary translation matrix. (May change in future).
+    // Set camera.
+    gluLookAt(0, 300, 1000, 0, 300, 0, 0, 1, 0);
+
+    // Set up translation. Our temporary translation matrix. (May change in future).
     float xTranslate = apESBActor->getPan() * (mpESBBox->getWidth() / 2);
     float yTranslate = apESBActor->getRegister() * mpESBBox->getHeight();
-
-    // Presence is a little harder...
     float depth = (apESBActor->getPresence() - 1.0f) * (mpESBBox->getDepth() * 2);
     float zTranslate = depth;
-    /*float zTranslate = -1 * sqrt(pow(depth, 2) - pow(xTranslate, 2));*/
-    mpESBCamera->setView();
     glTranslatef(xTranslate, yTranslate, zTranslate);
-    glColor3f(1.0f,0.0f,0.0f); 
 
+    // Enable some junk
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+
+    // ???
+    glBindTexture(GL_TEXTURE_2D, apESBActor->getTextureId());
+
+    // Enable states.
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    // Set array pointers.
+    glVertexPointer(3, GL_FLOAT, sizeof(vertex), apESBActor->getVerticies());
+    glTexCoordPointer(2, GL_FLOAT, 0, apESBActor->getTextureCoordinates());
+
+    // Define alpha.
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f(1.0f, 1.0f, 1.0f, apESBActor->getPresence()); 
+
+    // Draw.
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, apESBActor->getIndicies());
+
+    // Disable and go home.
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
 }
 
 
@@ -130,12 +203,23 @@ void ESBRenderer::drawActors()
 
 void ESBRenderer::drawBox()
 {
+    // Set mode.
     glMatrixMode(GL_MODELVIEW);
     glEnableClientState(GL_VERTEX_ARRAY);
+
+    // Load identity.
     glLoadIdentity();
+
+    // Set vertex array pointer.
     glVertexPointer(3, GL_FLOAT, sizeof(vertex), mpESBBox->getVerticies());
-    mpESBCamera->setView();
+
+    // Camera (fix).
+    gluLookAt(0, 300, 1000, 0, 300, 0, 0, 1, 0);
+
+    // Color.
     glColor3f(1.0f,1.0f,1.0f); 
+
+    // Draw and go home.
     glDrawElements(GL_LINES, 24, GL_UNSIGNED_SHORT, mpESBBox->getIndicies());
     glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -143,6 +227,10 @@ void ESBRenderer::drawBox()
 
 void ESBRenderer::initializeGL()
 {
+    // TEST
+
+
+
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
