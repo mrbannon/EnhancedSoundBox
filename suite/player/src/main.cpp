@@ -18,8 +18,7 @@ int main(int argc, char** argv)
     pESBActorManager->initialize();
 
     // Let's try to load a package. This will create the actors, load the textures, yada yada.
-    ESBPackage* pESBPackage = new ESBPackage("/Users/mrbannon/development/EnhancedSoundBox/packages/dummy.txt", 
-                                             pESBActorManager);
+    ESBPackage* pESBPackage = new ESBPackage(argv[1], pESBActorManager);
 
     // Great! We have a script and we know what we need to get. Everything is in place for this shitshow.
     // Let's hire/create a director. It will run everything.
