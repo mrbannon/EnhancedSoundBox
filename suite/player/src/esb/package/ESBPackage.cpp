@@ -15,13 +15,15 @@ const static std::string COMMAND_ACTOR_SET_PRESENCE = "actor_set_presence";
 const static std::string COMMAND_ACTOR_SET_REGISTER = "actor_set_register";
 const static std::string COMMAND_AUDIO_FILE_PATH = "audio_file_path";
 const static std::string COMMAND_PROJECT_NAME = "project_name";
+const static std::string COMMAND_TEXTURE = "texture";
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // PUBLIC
 ///////////////////////////////////////////////////////////////////////////////
-ESBPackage::ESBPackage(std::string aFilePath, ESBActorManager* apESBActorManager):
+ESBPackage::ESBPackage(std::string aFilePath, ESBActorManager* apESBActorManager, ESBRenderer* apESBRenderer):
 mpESBActorManager(apESBActorManager),
+mpESBRenderer(apESBRenderer),
 mFilePath(aFilePath),
 mPackageName(),
 mAudioFilePath()
@@ -136,6 +138,10 @@ void ESBPackage::processCommand(std::string aCommand, std::vector<std::string>* 
     else if(aCommand == COMMAND_PROJECT_NAME)
     {
         mPackageName = apParameters->at(0);
+    }
+    else if(aCommand == COMMAND_TEXTURE)
+    {
+        mpESBRenderer->loadTexture(apParameters->at(0), apParameters->at(1));
     }
     else
     {

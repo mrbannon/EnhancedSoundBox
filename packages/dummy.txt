@@ -5,10 +5,16 @@ project_name: Some Project Name
 audio_file_path: somesong.mp3
 
 ###############################################################################
+# Textures.
+###############################################################################
+texture: sonny, /Users/mrbannon/development/EnhancedSoundBox/packages/sonnybono.bmp
+texture: chaz, /Users/mrbannon/development/EnhancedSoundBox/packages/bono.bmp
+
+###############################################################################
 # Actor definitions.
 ###############################################################################
-actor: back_singer, Mr. Lead Singer, /Users/mrbannon/development/EnhancedSoundBox/packages/sonnybono.bmp
-actor: lead_singer, Mr. Dummy, /Users/mrbannon/development/EnhancedSoundBox/packages/bono.bmp
+actor: back_singer, Mr. Lead Singer, sonny
+actor: lead_singer, Mr. Dummy, chaz
 
 ###############################################################################
 # Events - lead_singer.

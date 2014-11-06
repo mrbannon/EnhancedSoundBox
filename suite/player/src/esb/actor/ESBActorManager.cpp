@@ -24,10 +24,10 @@ void ESBActorManager::initialize(void)
 }
 
 
-void ESBActorManager::createActor(std::string aId, std::string aName, std::string aTextureFilePath)
+void ESBActorManager::createActor(std::string aId, std::string aName, std::string aTextureName)
 {
-    // Load the BMP texture and get the resulting ID.
-    unsigned int textureId = mpESBRenderer->loadBMP(aTextureFilePath.c_str());
+    // Get the texture.
+    unsigned int textureId = mpESBRenderer->getTextureIdByName(aTextureName);
 
     // Create the actor.
     ESBActor* pTestActor = new ESBActor(200, 200, aId, aName, textureId);

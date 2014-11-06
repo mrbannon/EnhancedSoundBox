@@ -37,7 +37,7 @@ class ESBActorManager: public ESBAManager
         /**
          * Creates an actor and adds it to the list.
          */
-        void createActor(std::string aId, std::string aName, std::string aTextureFilePath);
+        void createActor(std::string aId, std::string aName, std::string aTextureName);
 
 
         /**

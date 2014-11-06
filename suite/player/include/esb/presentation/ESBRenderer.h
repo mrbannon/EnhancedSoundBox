@@ -2,10 +2,12 @@
 #define __ESBRENDERER_H__
 
 
+#include <map>
 #include <SDL.h>
 #include <vector>
 #include "../ESBABase.h"
 #include "../actor/ESBActor.h"
+#include "../presentation/ESBRenderer.h"
 #include "../stage/ESBBox.h"
 
 
@@ -58,9 +60,15 @@ class ESBRenderer: public ESBABase
 
 
         /**
-         * Loads BMP to texture data and returns texture ID.
+         * Loads texture.
          */
-        unsigned int loadBMP(const char *fileName);
+        void loadTexture(std::string aTextureName, std::string aTextureFilePath);
+
+
+        /**
+         * Gets texture ID by name.
+         */
+        unsigned int getTextureIdByName(std::string aTextureName);
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -111,6 +119,12 @@ class ESBRenderer: public ESBABase
         void initializeSDL();
 
 
+        /**
+         * Loads BMP to texture data and returns texture ID.
+         */
+        unsigned int loadBMP(const char *fileName);
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // PRIVATE
 ///////////////////////////////////////////////////////////////////////////////
@@ -124,6 +138,7 @@ class ESBRenderer: public ESBABase
         SDL_Window* mpSDLWindow;
         unsigned int mWindowHeight;
         unsigned int mWindowWidth;
+        std::map<std::string, unsigned int> mTextureMap;
 };
 
 #endif

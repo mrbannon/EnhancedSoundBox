@@ -18,7 +18,7 @@ class ESBPackage: public ESBABase
         /**
          * Constructor.
          */
-        ESBPackage(std::string aFilePath, ESBActorManager* apESBActorManager);
+        ESBPackage(std::string aFilePath, ESBActorManager* apESBActorManager, ESBRenderer* apESBRenderer);
 
 
         /**
@@ -51,6 +51,7 @@ class ESBPackage: public ESBABase
 
 
         ESBActorManager* mpESBActorManager;
+        ESBRenderer* mpESBRenderer;
 
         std::string mFilePath;
         std::string mPackageName;
