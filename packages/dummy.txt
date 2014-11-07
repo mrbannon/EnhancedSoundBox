@@ -26,17 +26,17 @@ actor_set_register: lead_singer,    1.0,    5000
 ###############################################################################
 # Events - back_singer.
 ###############################################################################
-actor_move_pan:     back_singer,    0.0,    0,      1.0,    10000
-actor_move_pan:     back_singer,    1.0,    10000,  0.0,    20000
-actor_move_pan:     back_singer,    0.0,    20000,  -1.0,   30000
-actor_move_pan:     back_singer,    -1.0,   30000,  0.0,    40000
+actor_move_pan:     back_singer,    0.0,    0,      1.0,    1000
+actor_move_pan:     back_singer,    1.0,    1000,  0.0,    2000
+actor_move_pan:     back_singer,    0.0,    2000,  -1.0,   3000
+actor_move_pan:     back_singer,    -1.0,   3000,  0.0,    4000
 
-actor_move_presence:    back_singer,    0.0,    0,      0.5,    10000
-actor_move_presence:    back_singer,    0.5,    10000,  1.0,    20000
-actor_move_presence:    back_singer,    1.0,    20000,  0.5,    30000
-actor_move_presence:    back_singer,    0.5,    30000,  0.0,    40000
+actor_move_presence:    back_singer,    0.0,    0,      0.5,    1000
+actor_move_presence:    back_singer,    0.5,    1000,  1.0,    2000
+actor_move_presence:    back_singer,    1.0,    2000,  0.5,    3000
+actor_move_presence:    back_singer,    0.5,    3000,  0.0,    4000
 
-actor_move_register:    back_singer,    0.0,    0,      0.5,    10000
-actor_move_register:    back_singer,    0.5,    10000,  1.0,    20000
-actor_move_register:    back_singer,    1.0,    20000,  0.5,    30000
-actor_move_register:    back_singer,    0.5,    30000,  0.0,    40000
+actor_move_register:    back_singer,    0.0,    0,      0.5,    1000
+actor_move_register:    back_singer,    0.5,    1000,  1.0,    2000
+actor_move_register:    back_singer,    1.0,    2000,  0.5,    3000
+actor_move_register:    back_singer,    0.5,    3000,  0.0,    4000
